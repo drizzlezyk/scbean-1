@@ -363,6 +363,7 @@ class PVCCA:
         plt.show()
 
 
+<<<<<<< Updated upstream
 def fit_integration(adata_x, adata_y, hidden_layers=[128,64,32,5], mode='PVCCA', latent_xy_size=2, epochs=30, sparse=False):
     if sparse:
         x = adata_x.X.A
@@ -374,6 +375,26 @@ def fit_integration(adata_x, adata_y, hidden_layers=[128,64,32,5], mode='PVCCA',
     net.build()
     net.compile()
     his = net.train(x, y, epochs=30, batch_size=128)
+=======
+def fit_integration(adata_x, adata_y, hidden_layers=[128,64,32,5], mode='PVCCA', latent_xy_size=2, epochs=30,
+                    sparse_x=False, sparse_y=False):
+    if sparse_x:
+        x = adata_x.X.A
+    else:
+        x = adata_x.X
+    if sparse_y:
+        y = adata_y.X.A
+    else:
+        y = adata_y.X
+    if mode=='VCCA':
+        net = VCCA(input_size_x=x.shape[1], inputs_size_y=y.shape[1], hidden_layers=hidden_layers)
+    else:
+        net = PVCCA(input_size_x=x.shape[1], inputs_size_y=y.shape[1], hidden_layers=hidden_layers,
+                    latent_xy_size=latent_xy_size)
+    net.build()
+    net.compile()
+    his = net.train(x, y, epochs=epochs, batch_size=128)
+>>>>>>> Stashed changes
     z = net.integrate(x)
     # adata_x.obsm['X_vcca'] = z
     # adata_y.obsm['X_vcca'] = z
